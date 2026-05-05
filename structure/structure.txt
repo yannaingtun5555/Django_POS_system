@@ -1,0 +1,24 @@
+pos_system/
+│
+├── backend/                 # Django project
+│   ├── manage.py
+│   ├── config/              # settings, urls
+│   │
+│   ├── apps/
+│   │   ├── products/        # inventory
+│   │   ├── sales/           # selling
+│   │   ├── purchases/       # buying/restocking
+│   │   ├── accounts/        # users (optional)
+│   │
+│   ├── templates/           # HTML UI
+│   ├── static/              # CSS, JS
+│
+├── analytics/               # Streamlit app
+│   ├── dashboard.py
+│   ├── queries.py
+│
+├── database/                # optional (scripts)
+│   ├── schema.sql
+│
+├── requirements.txt
+└── README.md

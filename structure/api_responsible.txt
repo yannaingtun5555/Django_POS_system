@@ -1,0 +1,126 @@
+Auth notes:
+│   - login returns access + refresh token and current user payload
+│   - register is admin only
+│   - all non-login auth endpoints require JWT access token
+
+Inventory responsibility:
+│   - acts as product master
+│   - stores product identity, price, cost, barcode, PLU, category, brand
+│   - exposes stock visibility APIs
+│   - does not own normal stock movement by itself
+│
+│   Inventory fields:
+│   - product_id
+│   - name
+│   - plu_code (optional, unique if provided)
+│   - barcode (required, unique)
+│   - brand
+│   - category
+│   - unit_cost
+│   - unit_price
+│   - stock_quantity
+│   - reorder_level
+│   - needs_reorder (computed: stock_quantity <= reorder_level)
+│   - created_at
+│   - updated_at
+│
+│   Inventory rules:
+│   - admin can create, update, delete
+│   - cashier can list, detail, search, low-stock
+│   - unit_cost >= 0
+│   - unit_price >= 0
+│   - stock_quantity >= 0
+│   - reorder_level >= 0
+│   - recommend validating unit_price >= unit_cost
+│   - delete should be blocked if product already has sales/purchase history
+│
+│   Inventory endpoint notes:
+│   - list: supports pagination and optional filters by category/brand
+│   - detail: single product lookup for cashier/admin screens
+│   - search: search by name, barcode, or PLU
+│   - create/update: product master changes only
+│   - low-stock: only products where stock_quantity <= reorder_level
+
+│
+│   Sales responsibility:
+│   - creates a transaction header and sale line items
+│   - decreases inventory stock
+│   - stores snapshot values used at time of sale
+│
+│   Sales create logic:
+│   - requires authenticated user
+│   - cashier or admin can create
+│   - validate every product exists
+│   - validate quantity > 0
+│   - validate enough stock before confirming sale
+│   - copy current product unit_cost and unit_price into sale row
+│   - calculate subtotal, total_amount, revenue, change
+│   - decrease inventory.stock_quantity
+│   - save everything inside a database transaction
+│
+│   Sales create request should include:
+│   - payment_method
+│   - payment
+│   - items: [{ product_id, quantity, discount? }]
+│
+│   Sales responses should include:
+│   - transaction header data
+│   - sale line items
+│   - updated totals
+│
+│   Sales failure cases:
+│   - insufficient stock
+│   - invalid product_id
+│   - invalid payment_method
+│   - payment less than total when cash flow requires full payment
+
+│
+│   Purchases responsibility:
+│   - creates purchase header and items
+│   - increases inventory stock
+│   - records supplier and cost history
+│
+│   Purchase create logic:
+│   - requires authenticated user
+│   - admin only or admin + authorized stock manager
+│   - validate every product exists
+│   - validate quantity > 0
+│   - validate unit_cost >= 0
+│   - calculate line subtotal and purchase total_cost
+│   - increase inventory.stock_quantity
+│   - optionally update inventory.unit_cost from latest purchase rule
+│   - save everything inside a database transaction
+│
+│   Purchase create request should include:
+│   - supplier_name
+│   - payment_method
+│   - payment
+│   - items: [{ product_id, quantity, unit_cost }]
+
+│
+│   Reports notes:
+│   - all reports should be read-only
+│   - usually admin only
+│   - stock-report should depend on inventory current stock and reorder state
+│   - profit-report should use sales snapshot values and purchase/inventory cost rules
+
+ History notes:
+    - unified timeline of sales and purchases
+    - supports filters by date range, user, and type
+    - read-only
+
+BUILD ORDER
+1. auth
+2. inventory
+3. purchases
+4. sales
+5. reports
+6. history
+
+TEST PRIORITIES
+- auth login/register/me/logout/change-password
+- inventory create/list/update/delete/low-stock/search/detail
+- purchase create increases stock
+- sale create decreases stock
+- sale create fails when stock is insufficient
+- permissions for admin vs cashier

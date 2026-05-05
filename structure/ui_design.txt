@@ -1,0 +1,93 @@
+POS STREAMLIT APP
+│
+├── 🏠 Dashboard (Home)
+├── 🛒 POS / Sales Screen
+├── 📦 Inventory
+├── 📥 Purchases
+├── 📊 Analytics / Reports
+├── 👤 Users (Admin only)
+└── ⚙ Settings
+_____________________________________________________________________
+Dashboard::
+[Total Sales Today]   [Profit Today]   [Transactions]
+
+[Low Stock Alerts]
+
+[Top Selling Products Chart]
+
+[Daily Sales Graph]
+_____________________________________________________________________
+POS/Sales Screen::
+LEFT SIDE: Product Search(plu_code)
+--------------------------------
+🔍 Barcode / Search box
+📦 Product list (auto filter)
+
+RIGHT SIDE: CART
+--------------------------------
+Product | Qty | Price | Total
+--------------------------------
+Cart table
+
+💰 Total Amount
+💳 Payment input
+🔘 Checkout button
+_____________________________________________________________________
+Inventory::
+📦 Product Table
+
+Columns:
+- Name
+- Barcode
+- Stock
+- Cost
+- Price
+
+🔘 Add Product button
+🔍 Search bar
+⚠ Low stock highlight
+_____________________________________________________________________
+Purchases::
+Supplier Name: [______]
+
+Product Search
+Add DataFile(excel) button
+Add New Item button
+
+Purchase Cart:
+Product | Qty | Unit Cost | Subtotal
+
+💰 Total Cost
+🔘 Save Purchase
+
+When Add New Item is clicked:
+- show inline form or modal
+- fields: Name, Barcode, PLU Code, Brand, Category, Unit Cost, Unit Price, Reorder Level, Quantity
+- save item into Inventory and also add it into current purchase cart
+
+Purchase detail / history actions:
+- view purchase detail
+- return purchase
+_____________________________________________________________________
+Report::
+📈 Sales Graph (daily/monthly)
+
+📊 Profit Graph
+
+🥇 Top Products
+
+💳 Payment Method Distribution
+
+📦 Stock Movement
+_____________________________________________________________________
+History::
+upper right - all/sale/purchase dropdown
+
+Table - 
+    type | date          | supplier name | total_amount | payment_method | payment | change |  (Table header)
+    type | trans_date    | -             | total_amount | payment_method | payment | change |  (if type == sale)
+    type | purchase_date | supplier_name | total_cost   | payment_method | payment |   -    | (if  type == purchase)
+
+button - date selector 
+button - apply
+_____________________________________________________________________

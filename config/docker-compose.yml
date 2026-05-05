@@ -1,0 +1,53 @@
+services:
+
+  db:
+    image: mysql:8
+    container_name: pos_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: pos_db
+      MYSQL_USER: pos_user
+      MYSQL_PASSWORD: pos_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: pos_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_NAME: pos_db
+      DB_USER: pos_user
+      DB_PASSWORD: pos_pass
+      DB_HOST: db
+      DB_PORT: 3306
+
+  reports:
+    build: ./report
+    container_name: pos_reports
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    environment:
+      DB_NAME: pos_db
+      DB_USER: pos_user
+      DB_PASSWORD: pos_pass
+      DB_HOST: db
+      DB_PORT: 3306
+
+volumes:
+  mysql_data:

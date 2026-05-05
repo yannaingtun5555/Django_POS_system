@@ -1,0 +1,43 @@
+create a setting page for  mypos system with only seperated html.css.js files
+if click add user,open a small window for inputs the inputs will be
+fields = [
+            "username",
+            "password",
+            "email", --optional
+            "first_name",
+            "last_name",
+            "role",
+        ]
+then make an api call of api/accounts/register/
+the pay load will be like
+{
+    "username": "string (required)",
+    "password": "string (min. 8 characters, required)",
+    "email": "string (optional, valid email format)",
+    "first_name": "string (required)",
+    "last_name": "string (required)",
+    "role": "string (required, must be one of the allowed roles)"
+}if userdont add email,remove the email row from the payload
+-if the response is 403 ,show the text of only admin can create the user
+-if the response id 201,show the text of unauth
+-if success show the text of success
+if the user click the report bug ,redierect the page to the gmail pae to seng gamil to the creator
+if user click the logout button,make an api call of api/accounts/logout/
+for general setting make an api call of api/accounts/config/
+this will be the response
+{
+    "data": {
+        "flags": {},
+        "settings": {
+            "SHOP_NAME": "My Awesome POS",
+            "CURRENCY_PREFIX": "$",
+        }
+    }
+}
+make them editable ,when user edit and save call the api of api/accounts/update_config/
+the payload should be 
+{
+    "SHOP_NAME": "New Shop Name",
+    "CURRENCY_PREFIX": "€",
+}
+i reserveed is the screenshot of the design ,remove eveything that dont include form the drsign

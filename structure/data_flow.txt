@@ -1,0 +1,36 @@
+Sale Flow::
+User (Cashier)
+   ↓
+API: create_transaction
+   ↓
+Backend logic:
+   ├─ check Inventory
+   ├─ get price & cost snapshot
+   ├─ create TransactionHeader
+   ├─ create Sales rows
+   ├─ update stock
+   ↓
+Database updated
+__________________________________________________________________________
+Purchace Flow::
+Admin
+   ↓
+API: create_purchase
+   ↓
+Backend logic:
+   ├─ create PurchaseHeader
+   ├─ create PurchaseItems
+   ├─ update Inventory stock (+)
+   ↓
+Database updated
+__________________________________________________________________________
+Report Flow(Analytics)::
+Admin
+   ↓
+API:(report api)
+   ↓
+Backend logic:
+   ├─query the data(sql)
+   ├─get the dataset
+   ├─using in dashboard
+   

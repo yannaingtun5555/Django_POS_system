@@ -1,0 +1,21 @@
+Selling products::
+User
+ ↓
+TransactionHeader (create bill)
+ ↓
+Inventory (read product info)
+ ↓
+Sales (store snapshot of each product)
+ ↓
+Inventory (update stock)
+ ↓
+TransactionHeader (final total + complete)
+__________________________________________________________________________
+Purchasing_products::
+User (admin)
+   ↓
+PurchaseHeader
+   ↓
+PurchaseItems
+   ↓
+Inventory (stock increases)

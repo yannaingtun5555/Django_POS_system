@@ -1,0 +1,9 @@
+Django
+mysqlclient   
+djangorestframework
+django-constance
+django-waffle
+djangorestframework-simplejwt
+openpyxl
+pymysql
+cryptography

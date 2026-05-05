@@ -1,0 +1,50 @@
+API ROOT: /api/
+
+├── auth/
+│   ├── login/
+│   ├── register/        ← ADMIN ONLY
+│   ├── refresh/
+│   ├── logout/
+│   ├── me/
+│   ├── change-password/
+
+├── core/
+│   ├── TotalSale_Profit_Transcation/
+│   ├── RollingDailtSale/       
+│   ├── LowStock/
+│   ├── TopSellings/
+│   ├── RecentActivity/
+
+├── inventory/
+│   ├── list/
+│   ├── detail/{product_id}/
+│   ├── search/?q=
+│   ├── create/
+│   ├── update/{id}/
+│   ├── delete/{id}/
+│   ├── low-stock/
+
+├── sales/
+│   ├── create/
+│   ├── list/
+│   ├── detail/{trans_id}/
+│   ├── today/
+│   ├── search_item_price
+│   ├── load_1k_items
+
+├── purchases/
+│   ├── create/
+│   ├── list/
+│   ├── detail/{purchase_id}
+│   ├── return/{purchase_id}/
+
+├── reports/
+│   ├── daily-sales/
+│   ├── monthly-sales/
+│   ├── profit-report/
+│   ├── top-products/
+│   ├── stock-report/
+
+└── history/
+    └── list/   ← (UNIFIED SALES + PURCHASE VIEW)
+    

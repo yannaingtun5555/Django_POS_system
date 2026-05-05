@@ -1,0 +1,94 @@
+| Table             | Role                      |
+| ----------------- | ------------------------- |
+| Users             | login + roles             |
+| Inventory         | current stock             |
+| TransactionHeader | bill summary              |
+| Sales             | product-level history     |
+| PurchaseHeader    | supplier purchase summary |
+| PurchaseItems     | stock inflow              |
+
+Table1- Inventory
+
+product_id(PK) 
+name
+plu_code
+barcode (unique)
+brand
+category
+unit_cost
+unit_price
+stock_quantity
+created_at
+updated_at
+reorder_level   ----WHERE stock_quantity <= reorder_level
+
+Table2- Sales
+
+sale_pid(PK)
+trans_id(FK)
+product_id(FK)
+user_id (FK)
+quantity
+created_at
+discount
+unit_cost_sale
+unit_price_sale
+revenue
+subtotal    ----Subtotal=(Quantity×Price)−Discount
+sale_status
+
+Table3- Transcation_header
+
+trans_id(PK)
+user_id(FK)
+trans_date
+total_amount
+payment_method
+payment
+change
+created_at
+status      ---Completed, Cancelled, Refunded
+
+Table4- Purchases_items
+
+purchase_item_id (PK)
+purchase_id(FK) 
+product_id(FK)
+user_id (FK)
+quantity
+unit_cost
+subtotal
+
+Table5- Purchases_header
+
+purchase_id (PK)
+user_id(FK)
+purchase_date
+supplier_name
+total_cost
+payment_method
+payment
+created_at
+status      ---draft, completed, cancelled, returned
+
+Purchase backend notes
+- Create purchase can use existing Inventory product_id
+- Create purchase can also register a new Inventory item using barcode as the stable lookup key
+- Purchase return deducts stock and marks purchase status as returned
+- Purchase list supports filters by supplier, status, product, user, and date range
+
+Table6- Users
+
+user_id (PK)
+username (unique)
+password    --- Django stores the hashed password here
+first_name
+last_name
+email
+role (admin/cashier)
+is_staff
+is_active
+is_superuser
+last_login
+date_joined
+created_at
