@@ -6,7 +6,8 @@ import signal
 import sys
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(file))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 COMPOSE_DIR = os.path.join(BASE_DIR, "config")
 
 def run(cmd):
@@ -50,5 +51,5 @@ def main():
     while True:
         time.sleep(1)
 
-if name == "main":
+if __name__ == "__main__":
     main()
