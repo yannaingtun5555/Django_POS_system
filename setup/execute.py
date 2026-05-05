@@ -1,41 +1,54 @@
 import subprocess
-import time
 import webbrowser
+import time
+import atexit
 import signal
 import sys
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(file))
 COMPOSE_DIR = os.path.join(BASE_DIR, "config")
 
-def run_compose(cmd):
-    return subprocess.run(
-        ["docker", "compose"] + cmd,
-        cwd=COMPOSE_DIR
-    )
+def run(cmd):
+    return subprocess.run(cmd, cwd=COMPOSE_DIR)
 
-def cleanup(signal_received=None, frame=None):
-    print("\n🛑 Stopping containers...")
-    run_compose(["down"])
+# 🔥 START DOCKER
+def start_docker():
+    print("Starting Docker containers...")
+    run(["docker", "compose", "up", "-d"])
+
+# 🔥 STOP DOCKER (important cleanup)
+def stop_docker():
+    print("Stopping Docker containers...")
+    run(["docker", "compose", "down"])
+
+# ensure cleanup always happens
+atexit.register(stop_docker)
+
+def handle_exit(signum, frame):
+    stop_docker()
     sys.exit(0)
 
-# Handle exit signals
-signal.signal(signal.SIGINT, cleanup)
-signal.signal(signal.SIGTERM, cleanup)
+signal.signal(signal.SIGINT, handle_exit)
+signal.signal(signal.SIGTERM, handle_exit)
 
-print("🚀 Starting POS system...")
+def wait_for_service():
+    # simple delay (you can improve with health check later)
+    time.sleep(5)
 
-run_compose(["up", "-d", "--build"])
+def open_ui():
+    webbrowser.open("http://localhost:8000")  # change to your Django port
 
-# Wait a bit (you can upgrade to health check later)
-time.sleep(5)
+def main():
+    start_docker()
+    wait_for_service()
+    open_ui()
 
-print("🌐 Opening browser...")
-webbrowser.open("http://localhost:8000")  # Django
-#webbrowser.open("http://localhost:8501")  # Streamlit
+    print("POS running... (closing EXE will stop Docker)")
 
-print("✅ POS running. Press CTRL+C to stop.")
+    # keep EXE alive silently
+    while True:
+        time.sleep(1)
 
-# Keep alive
-while True:
-    time.sleep(1)
+if name == "main":
+    main()
